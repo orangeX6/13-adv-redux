@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import Card from "../UI/Card";
 import classes from "./ProductItem.module.css";
