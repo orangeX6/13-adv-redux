@@ -5,7 +5,7 @@ import Cart from "./components/Cart/Cart";
 import Layout from "./components/Layout/Layout";
 import Products from "./components/Shop/Products";
 import Notification from "./components/UI/Notification";
-import { uiActions } from "./store/ui-slice";
+import { getCartData, sendCartData } from "./store/cart-actions";
 
 let initial = true;
 
@@ -17,55 +17,17 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      if (initial) return (initial = false);
+    dispatch(getCartData());
+  }, [dispatch]);
 
-      setTimeout(
-        () =>
-          dispatch(
-            uiActions.showNotification({
-              status: "hide",
-              title: "",
-              message: "",
-            })
-          ),
-        5000
-      );
-
-      dispatch(
-        uiActions.showNotification({
-          status: "pending",
-          title: "Sending...",
-          message: "Sending Cart Data!",
-        })
-      );
-
-      const response = await fetch(
-        "https://react-http-67642-default-rtdb.asia-southeast1.firebasedatabase.app/cart.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(cart),
-        }
-      );
-
-      if (!response.ok) throw new Error("Sending cart data failed");
-
-      dispatch(
-        uiActions.showNotification({
-          status: "success",
-          title: "Success!",
-          message: "Sent cart data successfully!",
-        })
-      );
-    })().catch((error) => {
-      dispatch(
-        uiActions.showNotification({
-          status: "error",
-          title: "Error!",
-          message: "Failed to send data",
-        })
-      );
-    });
+  useEffect(() => {
+    if (initial) {
+      initial = false;
+      return;
+    }
+    if (cart.changed) {
+      dispatch(sendCartData(cart));
+    }
   }, [cart, dispatch]);
 
   return (
