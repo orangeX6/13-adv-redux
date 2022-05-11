@@ -98,4 +98,46 @@ url: "/quotes/q2"
       Add a Quote
     </NavLink>
   </li>      
+
+
+ #React Router DOM v5 vs v6 (Refer to 291. upgrading to React Router v6 for rest)
+ 
+ -> 1. SWITCH - Switch doesn't exist in v6. We instead use Routes
+ -> 2. We use -  
+ #   <Route path="/products" element={<Products />} />
+ -> instead of passing the component as a prop
+ -> 3. EXACT PROP - With React Router version 5, we needed to add exact here because without exact, this would match if a path started with /products. With version 6, this behavior is gone and hence, the exact prop is gone.
+ -> 4. We can add * after path to get the behavior which was present without adding exact
+ >>  path='/welcome/*'
+ -> 5. React router uses a better algorithm and order of paths doesn't matter anymore
+ -> 6. activeClassName prop is removed from <NavLink>. You have to manually find out whether link is active or not
+ This can be done by - 
+  <li>
+    <NavLink
+      className={(navData) => (navData.isActive ? classes.active : '')}
+      to="/welcome"
+    >
+      Welcome
+    </NavLink>
+  </li>
+ ? navData argument is provided by React Router to the function, when the function is executed. The function is executed by react-router when it evaluates navLink and whenever your navigation changes.
+ -> 7. Redirect is gone. use Navigate instead
+>> EG - <Route path="/" element={<Navigate replace to="/welcome" />} />
+-> replace prop specifies that we need to replace the page
+-> 8. It is mandatory to wrap Route with Routes
+-> 9. Instead of defining the routes in the component where you want to load the nested route content, you can define them in main route definition file as well. For this we can use opening and closing route component tags and put our nested routes between those opening and closing tags as children. With this we can have all route definitions in one place
+>> EXAMPLE - 
+  <Route path="/welcome/*" element={<Welcome />}>
+    <Route path="new-user" element={<p>Welcome, new user!</p>} />
+  </Route> 
+  
+  >>Now, if you use this pattern though, you have to tell React Router where this nested content should be inserted into the DOM because it was clear when we had the route definition in the nested component, now that we have the route definition in App.js, it's not clear where exactly in Welcome.js this paragraph should be added.
+  -> 10 - To let React Router know where that nested content should be inserted, there is another new component, which you can import from react-router-dom. And that's the Outlet component
+      <Outlet />
+  >> This simply is a placeholder telling React Router where nested route content should be inserted
+  ->11. useHistory doesn't exist. useNavigate is alternative
+  -> <Prompt> doesn't exist and theres no alternative. You will have to make your own logic. Will probably come back later
+--------------------------------------------------------------------
+ >>> In addition to these changes, it's also worth noting that there were some internal changes with React Router version 6. Specifically, the internal logic for evaluating these paths and then picking a route to load changed.
+ 
 */
