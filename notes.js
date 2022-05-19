@@ -140,4 +140,69 @@ url: "/quotes/q2"
 --------------------------------------------------------------------
  >>> In addition to these changes, it's also worth noting that there were some internal changes with React Router version 6. Specifically, the internal logic for evaluating these paths and then picking a route to load changed.
  
+
+ # React transition group 
+  Transition 
+  <Transition
+          in={this.state.showBlock}
+          timeout={1000}
+          mountOnEnter
+          unmountOnExit
+          onEnter={() => console.log('onEnter')}
+          onEntering={() => console.log('onEntering')}
+          onEntered={() => console.log('onEntered')}
+          onExit={() => console.log('onExit')}
+          onExiting={() => console.log('onExiting')}
+          onExited={() => console.log('onExited')}
+        >
+          {(state) => (
+            <div
+              style={{
+                backgroundColor: 'red',
+                width: 100,
+                height: 100,
+                margin: 'auto',
+                transition: 'opacity 1s ease-out',
+                opacity: state === 'exiting' ? 0 : 1,
+              }}
+            ></div>
+          )}
+        </Transition>
+
+  CSSTransition 
+   <CSSTransition
+      in={props.show}
+      timeout={animationTiming}
+      mountOnEnter
+      unmountOnExit
+      classNames={{
+        enter: '',
+        enterActive: 'ModalOpen',
+        exit: '',
+        exitActive: 'ModalClose',
+        // appear:
+        // appearActive:
+      }}
+    >
+      <div className="Modal">
+        <h1>A Modal</h1>
+        <button className="Button" onClick={props.closed}>
+          Dismiss
+        </button>
+      </div>
+    </CSSTransition> 
+
+      <CSSTransition key={index} classNames="fade" timeout={300}>
+        <li className="ListItem" onClick={() => this.removeItemHandler(index)}>
+          {item}
+        </li>
+      </CSSTransition>
+
+  TransitionGroup
+   <TransitionGroup component="ul" className="List">
+          {listItems}
+   </TransitionGroup>
+
+
+ ? Alternatives - react-motion, react-move(inspired by d3 js transitions), react-router-transition (animations between different routes)
 */
